@@ -1,7 +1,7 @@
 const API_KEY = "85fc768d"
 
 async function fetchData(title) {
-    const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&t="${title}"`)
+    const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&t=${title}`)
     const data = await response.json()
     return data
 }
@@ -53,7 +53,9 @@ searchButtonElement.addEventListener('click', async () => {
     
     detailsButton.addEventListener("click", () => {
         modalTitleElement.textContent = movie.Title
-        modalBodyElement.innerHTML = ""
+        while (modalBodyElement.firstChild) {
+            modalBodyElement.removeChild(modalBodyElement.firstChild);
+        }
 
         const modalContent = `
             <div class="d-flex">
