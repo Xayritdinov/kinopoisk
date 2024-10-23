@@ -16,6 +16,7 @@ const searchResultsContainer = document.querySelector('.search-results');
 const spinnerElement = document.querySelector('#loading-spinner');
 const toastSuccess = document.querySelector('#toast-success');
 const toastFail = document.querySelector('#toast-fail');
+const toastFav = document.querySelector('#toast-fav');
 
 let movieTitleValue = '';
 
@@ -54,19 +55,44 @@ searchButtonElement.addEventListener('click', async () => {
             <div class="card-body">
                 <h5 class="card-title">${movie.Title}</h5>
                 <p class="card-text">${movie.Plot}</p>
-                <a
-                    href="#"
-                    class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                    id="details-button"
-                    >
-                    Подробнее
-                </a>
+                <div class="d-flex justify-content-between flex-wrap gap-2">
+                  <a
+                      href="#"
+                      class="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                      id="details-button"
+                      >
+                      Подробнее
+                  </a>
+                  <a
+                      href="#"
+                      class="btn btn-primary"
+                      id="add-fav-btn"
+                      >
+                      Избранное
+                  </a>
+                </div>
             </div>
         </div>
     `      
       searchResultsContainer.insertAdjacentHTML('beforeend', cardElement)
+
+      const addFavButton = document.getElementById('add-fav-btn');
+      addFavButton.addEventListener('click', () => {
+
+          if(localStorage.getItem('favMovies') === null) {
+              const favMoviesList = []
+              favMoviesList.push(movie)
+              localStorage.setItem('favMovies', JSON.stringify(favMoviesList))
+              return
+          }
+
+          const favMoviesList = JSON.parse(localStorage.getItem('favMovies'));
+          favMoviesList.push(movie);
+          localStorage.setItem('favMovies', JSON.stringify(favMoviesList));
+          showToast(toastFav);
+      })
 
       showToast(toastSuccess);
       
@@ -96,5 +122,10 @@ searchButtonElement.addEventListener('click', async () => {
     } else {
       showToast(toastFail);
     }
+    
   }, 1000);
+
+
+  
+
 });
